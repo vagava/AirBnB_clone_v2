@@ -1,6 +1,6 @@
---- Create databases  hbnb_dev_db
---- Create user hbnb_dev and grant privileges on hbnb_dev_db
---- Grant privileges to hbnb_dev on performance_schema
+-- Create databases  hbnb_dev_db
+-- Create user hbnb_dev and grant privileges on hbnb_dev_db
+-- Grant privileges to hbnb_dev on performance_schema
 
 CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
 CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
