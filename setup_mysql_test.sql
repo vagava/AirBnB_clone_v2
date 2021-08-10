@@ -1,6 +1,6 @@
---- Create databases  hbnb_test_db
---- Create user hbnb_test and grant privileges on hbnb_test_db
---- Grant privileges to hbnb_test on performance_schema
+-- Create databases  hbnb_test_db
+-- Create user hbnb_test and grant privileges on hbnb_test_db
+-- Grant privileges to hbnb_test on performance_schema
 
 CREATE DATABASE IF NOT EXISTS
     hbnb_test_db;
