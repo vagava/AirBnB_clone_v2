@@ -123,8 +123,6 @@ class HBNBCommand(cmd.Cmd):
         # args -> clase -> args[0], atributo -> atributo=valor, atributo=valor
         #
 
-        dict_parameters = {}
-        value = ''
         args = shlex.split(args)
         _class = args[0]
 
@@ -134,35 +132,33 @@ class HBNBCommand(cmd.Cmd):
         elif _class not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        # creo el diccionario para los parametros
+        dict_parameters = {}
 
         parameters = args[1:]
         # process the parameters
         for param in parameters:
             # verificate if format key = value
+            value = ''
             if '=' in param:
                 list_key_value = param.split('=')
                 key = list_key_value[0]
                 value_to_format = list_key_value[1]
-#                print(type(value_to_format))
                 if (len(value_to_format) > 0 and value_to_format[0] != '\''):
                     try:
-                        value_to_format = int(value_to_format)
+                        value = int(value_to_format)
                     except:
                         try:
-                            value_to_format = float(value_to_format)
+                            value = float(value_to_format)
                         except:
                             # FORMAT STRING
                             value = value_to_format.replace(
                                 '_', ' ').strip()
-                    dict_parameters[key] = value
-
+            dict_parameters[key] = value
         new_instance = HBNBCommand.classes[_class](**dict_parameters)
-#        for k, v in dict_parameters:
-#        setattr(new_instance, k, v)
-#        storage.new(new_instance)
-        storage.save()
         print(new_instance.id)
-
+        storage.new(new_instance)
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """

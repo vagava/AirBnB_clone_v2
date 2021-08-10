@@ -30,7 +30,7 @@ class BaseModel:
                 kwargs['created_at'] = datetime.now()
             # if created_at not in keys of kargs
             if 'id' in kwargs.keys():
-                kwargs['id'] = str(kwargs['id'])
+                kwargs['id'] = kwargs['id']
             else:
                 kwargs['id'] = str(uuid.uuid4())
             if '__class__' in kwargs.keys():
