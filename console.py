@@ -115,10 +115,20 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
-        # new_args = shlex.split(args)
-        # print(new_args)
-        if not args:
+        """ Create an object of any class
+            Usage : create <Class name> <param 1> <param 2> <param 3>...
+            Param syntax: <key name>=<value>
+        """
+        # new parse
+        # args -> clase -> args[0], atributo -> atributo=valor, atributo=valor
+        #
+
+        dict_parameters = {}
+        value = ''
+        args = shlex.split(args)
+        _class = args[0]
+
+        if not _class:
             print("** class name missing **")
             return
         elif _class not in HBNBCommand.classes:
@@ -152,6 +162,7 @@ class HBNBCommand(cmd.Cmd):
 #        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
+
 
     def help_create(self):
         """ Help information for the create method """
