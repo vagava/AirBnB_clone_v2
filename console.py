@@ -147,10 +147,10 @@ class HBNBCommand(cmd.Cmd):
                 if (len(value_to_format) > 0 and value_to_format[0] != '\''):
                     try:
                         value = int(value_to_format)
-                    except:
+                    except BaseException:
                         try:
                             value = float(value_to_format)
-                        except:
+                        except BaseException:
                             # FORMAT STRING
                             value = value_to_format.replace(
                                 '_', ' ').strip()
