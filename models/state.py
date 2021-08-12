@@ -12,9 +12,8 @@ class State(BaseModel, Base):
     """ State class """
 
     storage_type = getenv('HBNB_TYPE_STORAGE')
-
+    __tablename__ = 'states'
     if storage_type == 'db':
-        __tablename__ = 'states'
         name = Column(String(128), nullable=False)
         # cities -> nombre de la tabla en la clase hija(City)
         # back_populate -> nombre de la variable que recibe la relacion en city

@@ -13,13 +13,11 @@ class City(BaseModel, Base):
     """ The city class, contains state ID and name """
 
     # Revisar la variable de entorno
-
     storage_type = getenv('HBNB_TYPE_STORAGE')
+    # set the atributes of the class (columns name)
+    __tablename__ = 'cities'
 
     if storage_type == 'db':
-
-        # set the atributes of the class (columns name)
-        __tablename__ = 'cities'
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
         # State ->  nombre de la clase padre
