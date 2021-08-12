@@ -67,34 +67,31 @@ class DBStorage():
 
         # dict of class
         classes = {
-            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'User': User, 'Place': Place,
             'State': State, 'City': City, 'Amenity': Amenity,
             'Review': Review
         }
 
-        # 1 - recorrer diccionario de clases
-        # sacar la entidad (Clase) y pasarla al  query
-        # actualizar la lista de objetos
-
-        object_list = list()
-        print(cls)
+        instances = list()
         if cls:
-            object_list = self.__session.query(classes[cls]).all()
+            instances = self.__session.query(classes[cls]).all()
         else:
             for k in classes.keys():
                 try:
-                    object_list = self.__session.query(classes[k]).all()
+                    if (self.__session.query(classes[k]).all()) != []:
+                        instances.extend(
+                            self.__session.query(classes[k]).all())
                 except:
                     pass
 
         dict_to_return = {}
 
-        for instance in object_list:
+        for object_ in instances:
             # es posible que sea v['__class__']
-            name = instance.__class__.__name__
-            id = instance.__dict__['id']
+            name = object_.__class__.__name__
+            id = object_.__dict__['id']
             key = name + '.' + id
-            dict_to_return[key] = instance
+            dict_to_return[key] = object_
 
         return dict_to_return
 
