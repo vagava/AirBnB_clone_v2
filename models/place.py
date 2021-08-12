@@ -13,7 +13,7 @@ class Place(BaseModel):
     storage_type = getenv('HBNB_TYPE_STORAGE')
     # set the atributes of the class (columns name)
     __tablename__ = 'places'
-
+# clase hija de user y de city
     if storage_type == 'db':
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('states.id'), nullable=False)
@@ -26,9 +26,10 @@ class Place(BaseModel):
         latitude = Column(Float, nullable=False, default=0)
         longitude = Column(Integer, nullable=False, default=0)
 
+        user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
-
-        user = relationship('User', back_populates='users')
+        reviews = relationship(
+            'Review', back_populates='place', cascade='all, delete, delete-orphan')
 
     else:
         city_id = ""
@@ -42,3 +43,16 @@ class Place(BaseModel):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        def reviews(self):
+            from models.engine import storage
+            # dictionary of objects of City CLass
+            dict_ = storage.all('Review')
+            # list de ciudades que contiene el state_id == Satae.id
+            list_ = []
+            for k, v in dict_.items():
+                # v es un objeto, porlo tanto debemos acceder
+                # a los valores de su dccionario
+                if self.id in v.__dict__.values():
+                    list_.append(v)
+            return list_

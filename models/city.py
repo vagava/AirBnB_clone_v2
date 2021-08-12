@@ -16,7 +16,7 @@ class City(BaseModel, Base):
     storage_type = getenv('HBNB_TYPE_STORAGE')
     # set the atributes of the class (columns name)
     __tablename__ = 'cities'
-
+# clase padre de places y la clase hija de state
     if storage_type == 'db':
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
