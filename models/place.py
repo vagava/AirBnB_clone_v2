@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from os import getenv
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """ A place to stay """
     # Revisar la variable de entorno
     storage_type = getenv('HBNB_TYPE_STORAGE')
@@ -16,7 +16,7 @@ class Place(BaseModel):
 # clase hija de user y de city
     if storage_type == 'db':
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
-        user_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+        user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024))
         number_rooms = Column(Integer, nullable=False, default=0)
