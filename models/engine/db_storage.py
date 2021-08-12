@@ -91,6 +91,8 @@ class DBStorage():
             name = object_.__class__.__name__
             id = object_.__dict__['id']
             key = name + '.' + id
+            if '_sa_instance_state' in object_.__dict__.keys():
+                del object_.__dict__['_sa_instance_state']
             dict_to_return[key] = object_
 
         return dict_to_return
