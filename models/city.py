@@ -23,6 +23,9 @@ class City(BaseModel, Base):
         # State ->  nombre de la clase padre
         # cities -> nombre de la tabla de a clase hija (City)
         state = relationship('State', back_populates='cities')
+
+        places = relationship('Place', back_populates='cities',
+                              cascade='all, delete, delete-orphan')
     else:
         name = ''
         state_id = ''
