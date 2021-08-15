@@ -1,10 +1,19 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
+from models.amenity import Amenity
+from sqlalchemy.sql.elements import Null
 from sqlalchemy.sql.sqltypes import Float
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from os import getenv
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column(String(60), 'places_id', ForeignKey(
+                          'places.id'), primary_key=True),
+                      Column(String(60), 'amenity_id', ForeignKey(
+                          'amenities.id'), primary_key=True)
+                      )
 
 
 class Place(BaseModel, Base):
@@ -23,14 +32,14 @@ class Place(BaseModel, Base):
         number_bathrooms = Column(Integer, nullable=False, default=0)
         max_guest = Column(Integer, nullable=False, default=0)
         price_by_night = Column(Integer, nullable=False, default=0)
-        latitude = Column(Float, default=0)
-        longitude = Column(Integer, default=0)
+        latitude = Column(Float, nullable=True)
+        longitude = Column(Float, nullable=True)
 
         user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
         reviews = relationship(
-            'Review', back_populates='place',
-            cascade='all, delete, delete-orphan')
+            'Review', back_populates='place', cascade='all, delete, delete-orphan')
+        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
 
     else:
         city_id = ""
@@ -45,8 +54,14 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
+        @property
         def reviews(self):
-            from models.engine import storage
+            """
+
+            Returns:
+                [type]: [description]
+            """
+            from models import storage
             # dictionary of objects of City CLass
             dict_ = storage.all('Review')
             # list de ciudades que contiene el state_id == Satae.id
@@ -57,3 +72,28 @@ class Place(BaseModel, Base):
                 if self.id in v.__dict__.values():
                     list_.append(v)
             return list_
+
+        @property
+        def amenities(self):
+            """[summary]
+
+            Returns:
+                [type]: [description]
+            """
+            from models import storage
+            amenity_objects = list()
+            dict_objects = storage.all('Amenity')
+            for k, v in dict_objects.items():
+                if v.id in self.amenity_ids:
+                    amenity_objects.append(v)
+            return amenity_objects
+
+        @amenities.setter
+        def amenities(self, obj):
+            """[summary]
+
+            Args:
+                obj ([type]): [description]
+            """
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj)
