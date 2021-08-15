@@ -9,10 +9,10 @@ from sqlalchemy.orm import relationship
 from os import getenv
 
 place_amenity = Table('place_amenity', Base.metadata,
-                      Column(String(60), 'places_id', ForeignKey(
-                          'places.id'), primary_key=True),
-                      Column(String(60), 'amenity_id', ForeignKey(
-                          'amenities.id'), primary_key=True)
+                      Column('places_id', String(60),
+                      ForeignKey('places.id'), primary_key=True),
+                      Column('amenity_id', String(60),
+                      ForeignKey('amenities.id'), primary_key=True)
                       )
 
 
@@ -37,9 +37,10 @@ class Place(BaseModel, Base):
 
         user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
-        reviews = relationship(
-            'Review', back_populates='place', cascade='all, delete, delete-orphan')
-        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
+        reviews = relationship('Review', back_populates='place',
+                                cascade='all, delete, delete-orphan')
+        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False,
+                                 back_populates='place_amenities')
 
     else:
         city_id = ""

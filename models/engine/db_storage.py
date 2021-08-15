@@ -88,6 +88,7 @@ class DBStorage():
 
         for object_ in instances:
             # es posible que sea v['__class__']
+            print(object_)
             name = object_.__class__.__name__
             id = object_.to_dict()['id']
             key = name + '.' + id
