@@ -17,4 +17,5 @@ class Amenity(BaseModel, Base):
     else:
         name = ""
 
-    place_amenities = relationship()
+    place_amenities = relationship('Place', secondary=place_amenity,
+                                   back_populates='amenities')
