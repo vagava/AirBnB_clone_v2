@@ -88,10 +88,11 @@ class DBStorage():
 
         for object_ in instances:
             # es posible que sea v['__class__']
-            print(object_)
             name = object_.__class__.__name__
-            id = object_.to_dict()['id']
+            id = object_.__dict__['id']
             key = name + '.' + id
+            if '_sa_instance_state' in object_.__dict__.keys():
+                del object_.__dict__['_sa_instance_state']
             dict_to_return[key] = object_
 
         return dict_to_return
@@ -104,7 +105,7 @@ class DBStorage():
         """
 
         self.__session.add(obj)
-        self.save()
+        # self.save()
 
     def save(self):
         """commit all changes of the current database session"""
