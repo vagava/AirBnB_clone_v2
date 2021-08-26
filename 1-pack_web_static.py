@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-
-"""do_pack()"""
+"""
+do_pack()
+"""
 
 import tarfile
 import os.path
