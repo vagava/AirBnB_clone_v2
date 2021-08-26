@@ -4,7 +4,6 @@ sudo apt-get update
 sudo apt-get -y install nginx
 sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
-sudo chown -R ubuntu:ubuntu /data
 sudo tee -a /data/web_static/releases/test/index.html > /dev/null << END
 <html >
 <head >
@@ -15,6 +14,7 @@ Holberton School
 </html >
 END
 sudo ln -s /data/web_static/releases/test/ /data/web_static/current
+sudo chown -R ubuntu:ubuntu /data
 sudo sed -i '/server_name _;/a \\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
 sudo service nginx restart
 
