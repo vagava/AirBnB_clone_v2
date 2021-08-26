@@ -11,6 +11,7 @@ def do_pack():
     import tarfile
     import os.path
     from datetime import datetime
+    from fabric.api import local
 
     folder_to_save = 'versions'
     time_format = datetime.now().strftime("%Y%m%d%H%M%S")
