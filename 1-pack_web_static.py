@@ -3,15 +3,15 @@
 do_pack()
 """
 
-import tarfile
-import os.path
-from datetime import datetime
-
 
 def do_pack():
     """Fabric script that generates a .tgz archive from the contents 
     of the web_static folder 
     """
+    import tarfile
+    import os.path
+    from datetime import datetime
+
     folder_to_save = 'versions'
     time_format = datetime.now().strftime("%Y%m%d%H%M%S")
     tar_file = 'web_static_{}.tgz'.format(time_format)
