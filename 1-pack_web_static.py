@@ -23,5 +23,5 @@ def do_pack():
     with tarfile.open(folder_to_save + '/' + tar_file, "w:gz") as tar:
         tar.add('web_static', arcname=os.path.basename('web_static'))
 
-    if os.path.exists(folder_to_save + '/' + tar_file, "w:gz"):
-        return folder_to_save + '/' + tar_file, "w:gz"
+    if os.path.exists(folder_to_save + '/' + tar_file):
+        return folder_to_save + '/' + tar_file
