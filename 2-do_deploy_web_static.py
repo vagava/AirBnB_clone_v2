@@ -6,8 +6,8 @@ from datetime import datetime
 
 
 env.hosts = [
-    '34.138.131.46',
-    '34.228.168.55'
+    '35.243.253.93',
+    '35.243.253.93'
 ]
 
 env.user = "ubuntu"
@@ -36,7 +36,7 @@ def do_deploy(archive_path):
     create = run('mkdir -p /data/web_static/releases/{}/'.format(name_file))
     if create.failed:
         return False
-    descompress = run('tar xzf /tmp/{}.tgz -C /data/\
+    descompress = run('tar -xzf /tmp/{}.tgz -C /data/\
 web_static/releases/{}/'.format(name_file, name_file))
     if descompress.failed:
         return False
