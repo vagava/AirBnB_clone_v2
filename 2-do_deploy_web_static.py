@@ -1,70 +1,60 @@
 #!/usr/bin/python3
-""" script that sets up your web servers for the deployment of web_static """
-
-from fabric.api import env, run, put
+""" This script defines a function do_deploy """
+from fabric.api import put, run, env, local
 from os.path import isfile
+from datetime import datetime
 
-env.hosts = ['35.243.253.93', '3.81.226.200']
+
+env.hosts = [
+    '34.138.131.46',
+    '34.228.168.55'
+]
+
+env.user = "ubuntu"
 
 
 def do_pack():
-    """ script that sets up your web servers for the
-    deployment of web_static """
-
-    from fabric.api import local
-    from datetime import datetime
-    from fabric.context_managers import cd
-    import os.path
-
-    now = datetime.now()
-    dt_string = now.strftime("%Y%m%d%H%M%S")
-    file_name = 'web_static_' + dt_string
-    source_dir = 'web_static'
-
-    if not os.path.exists('versions'):
-        local("mkdir -p versions")
-    local("tar -zcvf versions/%s.tgz --absolute-names %s" %
-          (file_name, source_dir))
-    path_file = 'versions' + '/' + file_name + '.tgz'
-
-    if os.path.exists(path_file):
-        return(path_file)
-    else:
-        return(None)
+    """ This function generates a .tgz archive from the
+        contents of the web_static folder """
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+    name = 'web_static_' + date + '.tgz'
+    local('mkdir -p versions/')
+    descompress = local('tar -zcvf versions/{} web_static'.format(name))
+    if descompress.failed:
+        return None
+    return 'versions/' + name
 
 
 def do_deploy(archive_path):
-    """distributes an archive to your web servers, using the function do_deploy
-
-    Args:
-        archive_path ([file]): file at the path
-
-    Returns:
-        [bool]: True or False
-    """
-    from fabric.context_managers import cd
-
-    file_name = str(archive_path.replace('versions/', ''))
-    name = file_name.replace('.tgz', '')
-    pt_deploy = "/data/web_static/releases/"
-    wb_st = "/web_static/"
-
-    with cd("/tmp"):
-        if not isfile(archive_path):
-            return False
-        if put(archive_path, file_name).failed:
-            return (False)
-        if run("mkdir -p %s%s" % (pt_deploy, name)).failed:
-            return (False)
-        if run('tar -xzf %s -C %s%s' % (file_name, pt_deploy, name)).failed:
-            return (False)
-        if run('mv %s%s%s* %s%s/' % (pt_deploy, name, wb_st, pt_deploy, name)):
-            return(False)
-        if run('rm -rf %s%s/web_static' % (pt_deploy, name)).failed:
-            return (False)
-    with cd("/data/web_static"):
-        if run('rm -rf current').failed:
-            return (False)
-        if run('ln -s %s%s %scurrent' % (pt_deploy, name, pt_deploy)).failed:
-            return (False)
-    return (True)
+    """ This function distributes an archive to your web servers """
+    name_file = archive_path.split('/')[1][:-4]
+    if not isfile(archive_path):
+        return False
+    upload = put(archive_path, "/tmp/{}.tgz".format(name_file))
+    if upload.failed:
+        return False
+    create = run('mkdir -p /data/web_static/releases/{}/'.format(name_file))
+    if create.failed:
+        return False
+    descompress = run('tar xzf /tmp/{}.tgz -C /data/\
+web_static/releases/{}/'.format(name_file, name_file))
+    if descompress.failed:
+        return False
+    delete = run('rm /tmp/{}.tgz'.format(name_file))
+    if delete.failed:
+        return False
+    move = run('mv /data/web_static/releases/{}/web_static/* \
+/data/web_static/releases/{}/'.format(name_file, name_file))
+    if move.failed:
+        return False
+    o_del = run('rm -rf /data/web_static/releases/{}/\
+web_static'.format(name_file))
+    if o_del.failed:
+        return False
+    sym_l_del = run('rm -rf /data/web_static/current')
+    if sym_l_del.failed:
+        return False
+    symbolic = run('ln -s {} /data/web_static/current'.format(name_file))
+    if symbolic.failed:
+        return False
+    return True
