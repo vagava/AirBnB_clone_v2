@@ -22,6 +22,8 @@ def do_pack():
         local("tar -cvzf {} web_static".format(name))
     except Exception as e:
         return(None)
+    # set permisions
+    local('chmod 664 {}'.format(name))
     # get the size
     size = path.getsize(name)
     print('web_static packed: {} -> {}Bytes'.format(name, size))
