@@ -20,6 +20,10 @@ def do_pack():
     # compress files
     try:
         local("tar -cvzf {} web_static".format(name))
-        return(name)
     except Exception as e:
         return(None)
+    # get the size
+    size = path.getsize(name)
+    print('web_static packed: {} -> {}Bytes'.format(name, size))
+    return(name)
+
