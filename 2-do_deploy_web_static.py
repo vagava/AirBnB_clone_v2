@@ -6,8 +6,8 @@ from os import path
 from fabric.api import local, put, env
 from datetime import datetime
 
-# env.hosts = ["34.138.40.16","35.173.128.216"]
-# env.user = 'ubuntu'
+env.hosts = ["34.138.40.16","35.173.128.216"]
+env.user = 'ubuntu'
 
 def do_pack():
     ''' Create a file .tgz base on folder web_satatic'''
