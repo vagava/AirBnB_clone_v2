@@ -6,6 +6,7 @@ from os import path
 from fabric.api import local
 from datetime import datetime
 
+
 def do_pack():
     ''' Create a file .tgz base on web_satatic'''
     if not path.exists("./versions"):
