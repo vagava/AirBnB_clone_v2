@@ -13,9 +13,7 @@ def do_pack():
         local("mkdir -p versions")
 
     date = datetime.now()
-    time_name = '{}{:02d}{:02d}{:02d}{:02d}'.format(date.year, date.month,
-                                                    date.day, date.hour,
-                                                    date.minute, date.second)
+    time_name = date.strftime("%Y%m%d%H%M%S")
     name = 'versions/web_static_{}.tgz'.format(time_name)
     # compress files
     try:
@@ -23,7 +21,7 @@ def do_pack():
     except Exception as e:
         return(None)
     # set permisions
-    local('chmod 664 {}'.format(name))
+    # local('chmod 664 {}'.format(name))
     # get the size
     size = path.getsize(name)
     print('web_static packed: {} -> {}Bytes'.format(name, size))
