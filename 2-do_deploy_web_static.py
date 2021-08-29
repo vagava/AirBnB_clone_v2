@@ -3,11 +3,11 @@
 to your web servers, using the function do_deploy'''
 
 from os import path
-from fabric.api import local, put, env
+from fabric.api import local, put, env, run
 from datetime import datetime
 
 env.hosts = ["34.138.40.16","35.173.128.216"]
-env.user = 'ubuntu'
+# env.user = 'ubuntu'
 
 def do_pack():
     ''' Create a file .tgz base on folder web_satatic'''
@@ -34,13 +34,13 @@ def do_deploy(archive_path):
     if not path.exists(archive_path):
         return (False)
     try:
-        put(archive_path, '/tmp/')
         # set name file
         name_file = archive_path.split('/')[1].split(".")[0]
+        put(archive_path, '/tmp/{}.tgz'.format(name_file))
         # create a new folder
-        run('mkdir -p /data/web_static/releases/{}'.format(name_file))
+        run('mkdir -p /data/web_static/releases/{}/'.format(name_file))
         # uncompress file
-        run('tar -xzf /tmp/{} -C /data/web_static/releases/{}'.format(name_file, name_file))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(name_file, name_file))
         # delete temp file
         run('rm /tmp/{}.tgz'.format(name_file))
         # move the content from web_static to new folder
