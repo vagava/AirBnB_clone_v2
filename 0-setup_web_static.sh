@@ -12,7 +12,11 @@ if ! [ -d "/data/web_static/" ]; then sudo mkdir -p /data/web_static/; fi
 if ! [ -d "/data/web_static/releases/" ]; then sudo mkdir -p /data/web_static/releases/; fi
 if ! [ -d "/data/web_static/shared/" ]; then sudo mkdir -p /data/web_static/shared/; fi
 if ! [ -d "/data/web_static/releases/test/" ]; then sudo mkdir -p /data/web_static/releases/test/; fi
-echo " simple content, Bash script that sets up your web servers for the deployment of web_static " > sudo /data/web_static/releases/test/index.html
+# create file index.html
+sudo touch /data/web_static/releases/test/index.html
+#set permissions in index.html
+sudo chmod 766 /data/web_static/releases/test/index.html
+echo " simple content, Bash script that sets up your web servers for the deployment of web_static " > /data/web_static/releases/test/index.html
 #delete /data/web_static/current
 if [ -d "data/web_static/current" ]; then sudo rm -rf /data/web_static/current; fi
 #create a symbolic link if curren no exist it create automatically
